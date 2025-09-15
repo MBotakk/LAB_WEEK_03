@@ -7,16 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 
+// Define the interface for communication
+interface CoffeeListener {
+    fun onCoffeeSelected(id: Int)
+}
+
 class ListFragment : Fragment(), View.OnClickListener {
 
     private lateinit var coffeeListener: CoffeeListener
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if(context is CoffeeListener){
+        if (context is CoffeeListener) {
             coffeeListener = context
-        } else{
-            throw RuntimeException("Must implement CoffeeListener")
+        } else {
+            throw RuntimeException("$context must implement CoffeeListener")
         }
     }
 
@@ -24,6 +29,7 @@ class ListFragment : Fragment(), View.OnClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_list, container, false)
     }
 
@@ -37,14 +43,14 @@ class ListFragment : Fragment(), View.OnClickListener {
             view.findViewById(R.id.cappuccino)
         )
 
-        coffeeList.forEach{
+        coffeeList.forEach {
             it.setOnClickListener(this)
         }
     }
 
     override fun onClick(v: View?) {
-        v?.let{ coffee -> coffeeListener.onSelected(coffee.id) }
+        v?.let { coffee ->
+            coffeeListener.onCoffeeSelected(coffee.id)
+        }
     }
-
-    companion object
 }
